@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="الوسيط - موقع الإعلانات المبوبة في الكويت">
+    <meta name="keywords" content="الوسيط, إعلانات, الكويت, عقارات, سيارات, وظائف">
+    <meta name="theme-color" content="#e31837">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>الوسيط - Kuwait Waseet</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts - Noto Sans Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'waseet-red': '#e31837',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+        /* Focus styles */
+        *:focus-visible {
+            outline: 2px solid #e31837;
+            outline-offset: 2px;
+        }
+        .btn-primary:focus-visible,
+        .btn-outline:focus-visible {
+            outline-color: #e31837;
+            box-shadow: 0 0 0 4px rgba(227, 24, 55, 0.2);
+        }
+        .listing-card {
+            transition: all 0.3s ease;
+            animation: fade-in 0.5s ease-out;
+        }
+        .listing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .category-card {
+            transition: all 0.3s ease;
+            animation: fade-in 0.5s ease-out;
+        }
+        .category-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(227, 24, 55, 0.2);
+            outline: none;
+        }
+        .search-input:focus-visible {
+            outline: 2px solid #e31837;
+            outline-offset: 0;
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(227, 24, 55, 0.2);
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        .btn-primary:hover::after {
+            animation: ripple 1s ease-out;
+        }
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        .btn-outline {
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(227, 24, 55, 0.1);
+        }
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: translateY(-2px) rotate(8deg);
+            color: #e31837;
+        }
+        .search-input {
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            transform: scale(1.01);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen relative">
+    <!-- Back to Top Button -->
+    <button 
+        id="backToTop" 
+        class="fixed bottom-4 left-4 bg-waseet-red text-white p-3 rounded-full shadow-lg opacity-0 transition-all duration-300 hover:bg-red-700 focus:outline-none z-50"
+        onclick="scrollToTop()"
+    >
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    <!-- Notification Banner -->
+    <div id="notification" class="bg-waseet-red text-white py-2 px-4 text-center relative hidden">
+        <p class="text-sm">مرحباً بكم في الموقع الجديد للوسيط! 🎉</p>
+        <button onclick="closeNotification()" class="absolute left-2 top-1/2 transform -translate-y-1/2 text-white hover:opacity-75">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-500" role="alert" aria-label="جاري التحميل">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-waseet-red border-t-transparent"></div>
+            <p class="mt-4 text-gray-600">جاري التحميل...</p>
+        </div>
+    </div>
+
+    <script>
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const searchSuggestions = document.getElementById('search-suggestions');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    toggleMobileMenu();
+                }
+                if (!searchSuggestions.classList.contains('hidden')) {
+                    searchSuggestions.classList.add('hidden');
+                }
+            }
+        });
+
+        function handleOptionKeydown(event, option) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                selectSearchOption(option);
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                const next = option.nextElementSibling;
+                if (next && next.hasAttribute('role')) {
+                    next.focus();
+                }
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                const prev = option.previousElementSibling;
+                if (prev && prev.hasAttribute('role')) {
+                    prev.focus();
+                } else {
+                    document.querySelector('.search-input').focus();
+                }
+            }
+        }
+
+        function selectSearchOption(option) {
+            const searchInput = document.querySelector('.search-input');
+            searchInput.value = option.querySelector('span').textContent.trim();
+            document.getElementById('search-suggestions').classList.add('hidden');
+            searchInput.focus();
+        }
+
+        // Loading handler
+        window.addEventListener('load', function() {
+            initBackToTop();
+            const loader = document.getElementById('loading');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                showNotification();
+            }, 500);
+        });
+
+        // Notification handler
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('hidden');
+            notification.style.animation = 'slideDown 0.5s ease-out';
+        }
+
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            notification.style.animation = 'slideUp 0.5s ease-out';
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 450);
+        }
+
+        // Search functionality
+        function handleSearch(event) {
+            const searchInput = event.target;
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            // Add search suggestions
+            const suggestions = document.getElementById('search-suggestions');
+            if (searchTerm.length > 0) {
+                suggestions.classList.remove('hidden');
+            } else {
+                suggestions.classList.add('hidden');
+            }
+        }
+
+        // Close search suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            const suggestions = document.getElementById('search-suggestions');
+            const searchInput = document.querySelector('.search-input');
+            if (!searchInput.contains(event.target)) {
+                suggestions.classList.add('hidden');
+            }
+        });
+
+        // Back to Top functionality
+        function initBackToTop() {
+            const backToTopButton = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.style.opacity = '1';
+                    backToTopButton.style.transform = 'translateY(0)';
+                } else {
+                    backToTopButton.style.opacity = '0';
+                    backToTopButton.style.transform = 'translateY(20px)';
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+    </script>
+
+    <style>
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100%); }
+        }
+    </style>
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3 relative">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="images/logo.svg" alt="Waseet Logo" class="h-10">
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="flex-1 mx-2 md:mx-6">
+                    <div class="relative">
+                    <input 
+                        type="text" 
+                        placeholder="ابحث في الوسيط" 
+                        class="search-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                        oninput="handleSearch(event)"
+                        aria-label="البحث"
+                        role="searchbox"
+                    >
+                        <button class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-waseet-red transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <!-- Search Suggestions -->
+                        <div id="search-suggestions" class="absolute top-full right-0 left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50" role="listbox">
+                            <div class="p-2">
+                                <div class="flex items-center p-2 hover:bg-gray-50 focus:bg-gray-50 rounded cursor-pointer transition-colors" role="option" tabindex="0" onclick="selectSearchOption(this)" onkeydown="handleOptionKeydown(event, this)">
+                                    <i class="fas fa-car text-gray-400 ml-2 group-hover:text-waseet-red group-focus:text-waseet-red"></i>
+                                    <span>سيارات للبيع في الكويت</span>
+                                </div>
+                                <div class="flex items-center p-2 hover:bg-gray-50 focus:bg-gray-50 rounded cursor-pointer transition-colors" role="option" tabindex="0" onclick="selectSearchOption(this)" onkeydown="handleOptionKeydown(event, this)">
+                                    <i class="fas fa-home text-gray-400 ml-2 group-hover:text-waseet-red group-focus:text-waseet-red"></i>
+                                    <span>شقق للإيجار في السالمية</span>
+                                </div>
+                                <div class="flex items-center p-2 hover:bg-gray-50 focus:bg-gray-50 rounded cursor-pointer transition-colors" role="option" tabindex="0" onclick="selectSearchOption(this)" onkeydown="handleOptionKeydown(event, this)">
+                                    <i class="fas fa-briefcase text-gray-400 ml-2 group-hover:text-waseet-red group-focus:text-waseet-red"></i>
+                                    <span>وظائف شاغرة</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- User Actions -->
+                <div class="flex items-center space-x-2 md:space-x-4 space-x-reverse">
+                    <div class="hidden md:flex items-center space-x-2 md:space-x-4 space-x-reverse">
+                        <button class="btn-outline px-4 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white">
+                            تسجيل الدخول
+                        </button>
+                        <button class="btn-primary px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                            أضف إعلانك
+                        </button>
+                    </div>
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden text-gray-600 hover:text-waseet-red" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu -->
+                <div id="mobileMenu" class="hidden md:hidden absolute top-full right-0 left-0 bg-white shadow-lg mt-2 rounded-b-lg z-50">
+                    <div class="p-4 space-y-3">
+                        <button class="w-full btn-outline px-4 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white">
+                            تسجيل الدخول
+                        </button>
+                        <button class="w-full btn-primary px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                            أضف إعلانك
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Categories Section -->
+    <section class="py-4 md:py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+                <!-- Category 1 -->
+                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
+                    <img src="images/cars.svg" alt="مركبات" class="w-16 h-16 mx-auto mb-4">
+                    <h3 class="text-lg font-semibold">مركبات</h3>
+                </div>
+                
+                <!-- Category 2 -->
+                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
+                    <img src="images/properties.svg" alt="عقارات" class="w-16 h-16 mx-auto mb-4">
+                    <h3 class="text-lg font-semibold">عقارات</h3>
+                </div>
+                
+                <!-- Category 3 -->
+                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
+                    <img src="images/services.svg" alt="خدمات" class="w-16 h-16 mx-auto mb-4">
+                    <h3 class="text-lg font-semibold">خدمات</h3>
+                </div>
+                
+                <!-- Category 4 -->
+                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
+                    <img src="images/jobs.svg" alt="وظائف" class="w-16 h-16 mx-auto mb-4">
+                    <h3 class="text-lg font-semibold">وظائف</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Listings -->
+    <section class="py-4 md:py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-4 md:mb-6">إعلانات مميزة</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                <!-- Listing 1 -->
+                <div class="listing-card border rounded-lg overflow-hidden hover:shadow-lg transition">
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group">
+                        <i class="fas fa-home text-4xl text-gray-400 group-hover:text-waseet-red transition-colors duration-300 floating"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">شقة للإيجار في السالمية</h3>
+                        <p class="text-gray-600 mb-2">شقة فاخرة مع إطلالة على البحر</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-red-600 font-bold">450 د.ك</span>
+                            <span class="text-gray-500 text-sm">منذ 3 أيام</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 2 -->
+                <div class="listing-card border rounded-lg overflow-hidden hover:shadow-lg transition">
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group">
+                        <i class="fas fa-car text-4xl text-gray-400 group-hover:text-waseet-red transition-colors duration-300 floating"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">سيارة تويوتا كامري 2022</h3>
+                        <p class="text-gray-600 mb-2">حالة ممتازة، كيلومترات قليلة</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-red-600 font-bold">8,500 د.ك</span>
+                            <span class="text-gray-500 text-sm">منذ يومين</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 3 -->
+                <div class="listing-card border rounded-lg overflow-hidden hover:shadow-lg transition">
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group">
+                        <i class="fas fa-tools text-4xl text-gray-400 group-hover:text-waseet-red transition-colors duration-300 floating"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">خدمات نقل وتركيب أثاث</h3>
+                        <p class="text-gray-600 mb-2">خدمة احترافية مع ضمان</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-red-600 font-bold">سعر تنافسي</span>
+                            <span class="text-gray-500 text-sm">منذ ساعة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 md:py-8 mt-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">عن الوسيط</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-red-400">من نحن</a></li>
+                        <li><a href="#" class="hover:text-red-400">اتصل بنا</a></li>
+                        <li><a href="#" class="hover:text-red-400">الشروط والأحكام</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">خدماتنا</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-red-400">أضف إعلانك</a></li>
+                        <li><a href="#" class="hover:text-red-400">الإعلانات المميزة</a></li>
+                        <li><a href="#" class="hover:text-red-400">المساعدة</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">التصنيفات</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-red-400">عقارات</a></li>
+                        <li><a href="#" class="hover:text-red-400">سيارات</a></li>
+                        <li><a href="#" class="hover:text-red-400">وظائف</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">تابعنا</h4>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <a href="#" class="social-icon text-xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon text-xl"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon text-xl"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+                <p>&copy; 2024 الوسيط. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
