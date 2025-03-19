@@ -172,6 +172,22 @@
     </div>
 
     <script>
+        // Category card interaction
+        function handleCategoryClick(category) {
+            const categoryName = category.querySelector('h3').textContent;
+            console.log(`Selected category: ${categoryName}`);
+            // Add visual feedback
+            category.classList.add('scale-95');
+            setTimeout(() => category.classList.remove('scale-95'), 200);
+        }
+
+        function handleCategoryKeydown(event, category) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleCategoryClick(category);
+            }
+        }
+
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
@@ -382,27 +398,51 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
                 <!-- Category 1 -->
-                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
-                    <img src="images/cars.svg" alt="مركبات" class="w-16 h-16 mx-auto mb-4">
-                    <h3 class="text-lg font-semibold">مركبات</h3>
+                <div 
+                    class="category-card group bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer"
+                    tabindex="0"
+                    role="button"
+                    onclick="handleCategoryClick(this)"
+                    onkeydown="handleCategoryKeydown(event, this)"
+                >
+                    <img src="images/cars.svg" alt="مركبات" class="w-16 h-16 mx-auto mb-4 transform group-hover:scale-110 group-focus:scale-110 transition-transform">
+                    <h3 class="text-lg font-semibold group-hover:text-waseet-red group-focus:text-waseet-red transition-colors">مركبات</h3>
                 </div>
                 
                 <!-- Category 2 -->
-                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
-                    <img src="images/properties.svg" alt="عقارات" class="w-16 h-16 mx-auto mb-4">
-                    <h3 class="text-lg font-semibold">عقارات</h3>
+                <div 
+                    class="category-card group bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer"
+                    tabindex="0"
+                    role="button"
+                    onclick="handleCategoryClick(this)"
+                    onkeydown="handleCategoryKeydown(event, this)"
+                >
+                    <img src="images/properties.svg" alt="عقارات" class="w-16 h-16 mx-auto mb-4 transform group-hover:scale-110 group-focus:scale-110 transition-transform">
+                    <h3 class="text-lg font-semibold group-hover:text-waseet-red group-focus:text-waseet-red transition-colors">عقارات</h3>
                 </div>
                 
                 <!-- Category 3 -->
-                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
-                    <img src="images/services.svg" alt="خدمات" class="w-16 h-16 mx-auto mb-4">
-                    <h3 class="text-lg font-semibold">خدمات</h3>
+                <div 
+                    class="category-card group bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer"
+                    tabindex="0"
+                    role="button"
+                    onclick="handleCategoryClick(this)"
+                    onkeydown="handleCategoryKeydown(event, this)"
+                >
+                    <img src="images/services.svg" alt="خدمات" class="w-16 h-16 mx-auto mb-4 transform group-hover:scale-110 group-focus:scale-110 transition-transform">
+                    <h3 class="text-lg font-semibold group-hover:text-waseet-red group-focus:text-waseet-red transition-colors">خدمات</h3>
                 </div>
                 
                 <!-- Category 4 -->
-                <div class="category-card bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer">
-                    <img src="images/jobs.svg" alt="وظائف" class="w-16 h-16 mx-auto mb-4">
-                    <h3 class="text-lg font-semibold">وظائف</h3>
+                <div 
+                    class="category-card group bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition cursor-pointer"
+                    tabindex="0"
+                    role="button"
+                    onclick="handleCategoryClick(this)"
+                    onkeydown="handleCategoryKeydown(event, this)"
+                >
+                    <img src="images/jobs.svg" alt="وظائف" class="w-16 h-16 mx-auto mb-4 transform group-hover:scale-110 group-focus:scale-110 transition-transform">
+                    <h3 class="text-lg font-semibold group-hover:text-waseet-red group-focus:text-waseet-red transition-colors">وظائف</h3>
                 </div>
             </div>
         </div>
