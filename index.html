@@ -230,6 +230,37 @@
             searchInput.focus();
         }
 
+        // Interaction handlers
+        function handleCategoryClick(category) {
+            const categoryName = category.querySelector('h3').textContent;
+            console.log(`Selected category: ${categoryName}`);
+            // Add visual feedback
+            category.classList.add('scale-95');
+            setTimeout(() => category.classList.remove('scale-95'), 200);
+        }
+
+        function handleCategoryKeydown(event, category) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleCategoryClick(category);
+            }
+        }
+
+        // Listing interactions
+        function handleListingClick(listing) {
+            const title = listing.querySelector('h3').textContent;
+            console.log(`Selected listing: ${title}`);
+            listing.classList.add('scale-95');
+            setTimeout(() => listing.classList.remove('scale-95'), 200);
+        }
+
+        function handleListingKeydown(event, listing) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleListingClick(listing);
+            }
+        }
+
         // Loading handler
         window.addEventListener('load', function() {
             initBackToTop();
@@ -454,45 +485,63 @@
             <h2 class="text-2xl font-bold mb-4 md:mb-6">إعلانات مميزة</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 <!-- Listing 1 -->
-                <div class="listing-card border rounded-lg overflow-hidden hover:shadow-lg transition">
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group">
-                        <i class="fas fa-home text-4xl text-gray-400 group-hover:text-waseet-red transition-colors duration-300 floating"></i>
+                <div 
+                    class="listing-card group border rounded-lg overflow-hidden hover:shadow-lg transition"
+                    tabindex="0"
+                    role="button"
+                    onclick="handleListingClick(this)"
+                    onkeydown="handleListingKeydown(event, this)"
+                >
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        <i class="fas fa-home text-4xl text-gray-400 group-hover:text-waseet-red group-focus:text-waseet-red transition-colors duration-300 floating"></i>
                     </div>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2">شقة للإيجار في السالمية</h3>
                         <p class="text-gray-600 mb-2">شقة فاخرة مع إطلالة على البحر</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-red-600 font-bold">450 د.ك</span>
+                            <span class="text-waseet-red font-bold group-hover:scale-110 group-focus:scale-110 transition-transform inline-block">450 د.ك</span>
                             <span class="text-gray-500 text-sm">منذ 3 أيام</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Listing 2 -->
-                <div class="listing-card border rounded-lg overflow-hidden hover:shadow-lg transition">
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group">
-                        <i class="fas fa-car text-4xl text-gray-400 group-hover:text-waseet-red transition-colors duration-300 floating"></i>
+                <div 
+                    class="listing-card group border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer"
+                    tabindex="0"
+                    role="button"
+                    onclick="handleListingClick(this)"
+                    onkeydown="handleListingKeydown(event, this)"
+                >
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        <i class="fas fa-car text-4xl text-gray-400 group-hover:text-waseet-red group-focus:text-waseet-red transition-colors duration-300 floating"></i>
                     </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold mb-2">سيارة تويوتا كامري 2022</h3>
+                    <div class="p-4 group-hover:bg-gray-50 group-focus:bg-gray-50 transition-colors">
+                        <h3 class="text-lg font-semibold mb-2 group-hover:text-waseet-red group-focus:text-waseet-red">سيارة تويوتا كامري 2022</h3>
                         <p class="text-gray-600 mb-2">حالة ممتازة، كيلومترات قليلة</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-red-600 font-bold">8,500 د.ك</span>
+                            <span class="text-waseet-red font-bold group-hover:scale-110 group-focus:scale-110 transition-transform inline-block">8,500 د.ك</span>
                             <span class="text-gray-500 text-sm">منذ يومين</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Listing 3 -->
-                <div class="listing-card border rounded-lg overflow-hidden hover:shadow-lg transition">
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group">
-                        <i class="fas fa-tools text-4xl text-gray-400 group-hover:text-waseet-red transition-colors duration-300 floating"></i>
+                <div 
+                    class="listing-card group border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer"
+                    tabindex="0"
+                    role="button"
+                    onclick="handleListingClick(this)"
+                    onkeydown="handleListingKeydown(event, this)"
+                >
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        <i class="fas fa-tools text-4xl text-gray-400 group-hover:text-waseet-red group-focus:text-waseet-red transition-colors duration-300 floating"></i>
                     </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold mb-2">خدمات نقل وتركيب أثاث</h3>
+                    <div class="p-4 group-hover:bg-gray-50 group-focus:bg-gray-50 transition-colors">
+                        <h3 class="text-lg font-semibold mb-2 group-hover:text-waseet-red group-focus:text-waseet-red">خدمات نقل وتركيب أثاث</h3>
                         <p class="text-gray-600 mb-2">خدمة احترافية مع ضمان</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-red-600 font-bold">سعر تنافسي</span>
+                            <span class="text-waseet-red font-bold group-hover:scale-110 group-focus:scale-110 transition-transform inline-block">سعر تنافسي</span>
                             <span class="text-gray-500 text-sm">منذ ساعة</span>
                         </div>
                     </div>
